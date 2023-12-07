@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input } from "reactstrap";
-import { FaInfoCircle } from "react-icons/fa";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -9,10 +8,10 @@ import Swal from "sweetalert2";
 
 const UserDashboard = () => {
   const [events, setEvents] = useState([
-    { id: 1, title: "Concierto en el Parque", start: "2023-12-15", location: "Parque Central", guests: 200, image: "https://via.placeholder.com/300" },
-    { id: 2, title: "Exposición de Arte", start: "2023-12-20", location: "Galería de Arte", guests: 75, image: "https://via.placeholder.com/300" },
-    { id: 3, title: "Hackatón", start: "2023-12-19", location: "Ceviset", guests: 200, image: "https://via.placeholder.com/300" },
-    { id: 4, title: "Integradoras", start: "2023-12-01", location: "Galería de Arte", guests: 75, image: "https://via.placeholder.com/300" },
+    { id: 1, title: "Concierto en el Parque", start: "2023-12-15", location: "Parque Central", guests: 200, image: "https://popurrideviajes.mx/wp-content/uploads/2018/07/jardines-de-mexico-6.png" },
+    { id: 2, title: "Exposición de Arte", start: "2023-12-20", location: "Galería de Arte", guests: 760, image: "https://cdn0.bodas.com.mx/vendor/3959/3_2/960/jpg/p1040587_5_83959.jpeg" },
+    { id: 3, title: "Hackatón", start: "2023-12-19", location: "Ceviset", guests: 200, image: "https://tec.mx/sites/default/files/styles/16_9_campus/public/repositorio/Campus/Slider/tec-cuernavaca-fachada.jpg?itok=njTGvw5v" },
+    { id: 4, title: "Integradoras", start: "2023-12-01", location: "Galería de Arte", guests: 75, image: "https://upload.wikimedia.org/wikipedia/commons/f/fc/UTEZ_vista.jpg" },
   ]);
 
   const [registerModal, setRegisterModal] = useState(false);
@@ -27,8 +26,9 @@ const UserDashboard = () => {
   const [imageEditMode, setImageEditMode] = useState(false);
 
   const toggleRegisterModal = (info) => {
+    // Verifica si info.dateStr es definido antes de asignarlo
+    setNewEventDate(info?.dateStr || null);
     setNewEventTitle("");
-    setNewEventDate(info.dateStr);
     setNewEventLocation("");
     setNewEventGuests("");
     setNewEventImage(null);
@@ -44,13 +44,13 @@ const UserDashboard = () => {
 
   const handleEventClick = (info) => {
     Swal.fire({
-      title: '¡Acción realizada exitosamente!',
-      icon: "success",
-    });
+      title: '¡No puedes registrar un evento en este Día!',
+      icon: "error",
+    })
   };
 
   const handleEventRegistration = () => {
-    if (newEventTitle && newEventDate) {
+    if (newEventTitle && newEventDate && newEventLocation && newEventGuests) {
       const newEvent = {
         id: events.length + 1,
         title: newEventTitle,
@@ -61,7 +61,18 @@ const UserDashboard = () => {
       };
 
       setEvents([...events, newEvent]);
-      toggleRegisterModal();
+
+      Swal.fire({
+        title: '¡Acción realizada exitosamente!',
+        icon: "success",
+      }).then(() => {
+        toggleRegisterModal();
+      });
+    } else {
+      Swal.fire({
+        title: 'Todos los campos son requeridos',
+        icon: "error",
+      });
     }
   };
 
@@ -83,6 +94,17 @@ const UserDashboard = () => {
     setDetailsModal(false);
   };
 
+  const handleSaveChanges = () => {
+    Swal.fire({
+      title: '¡Cambios guardados exitosamente!',
+      icon: "success",
+    })
+      .then(() => {
+        setEditMode(false);
+        window.location.reload();
+      });
+  };
+
   return (
     <>
       <UserHeader />
@@ -99,16 +121,16 @@ const UserDashboard = () => {
                   <Card key={event.id} className="mb-3" style={{ maxWidth: "100%", border: '2px solid #ccc', borderRadius: '8px', padding: '16px' }}>
                     <CardBody>
                       <Row>
-                        <Col md="8">
+                        <Col md="7">
                           <h5>{event.title}</h5>
                           <p>Fecha: {event.start}</p>
                           <p>Dirección: {event.location}</p>
                           <p>Invitados: {event.guests}</p>
                           <Button color="primary" onClick={() => toggleDetailsModal(event)}>Ver Detalles</Button>
                         </Col>
-                        <Col md="4">
+                        <Col md="5">
                           {event.image && (
-                            <img src={event.image} alt={event.title} style={{ maxWidth: "100%", height: "auto" }} />
+                            <img src={event.image} alt={event.title} style={{ width: "150px", height: "100px", borderRadius: "5%", marginTop: "50%" }} />
                           )}
                         </Col>
                       </Row>
@@ -150,7 +172,7 @@ const UserDashboard = () => {
                 id="eventTitle"
                 value={newEventTitle}
                 onChange={(e) => setNewEventTitle(e.target.value)}
-                readOnly={!editMode}
+                required
               />
             </FormGroup>
             <FormGroup>
@@ -169,7 +191,7 @@ const UserDashboard = () => {
                 id="eventLocation"
                 value={newEventLocation}
                 onChange={(e) => setNewEventLocation(e.target.value)}
-                readOnly={!editMode}
+                required
               />
             </FormGroup>
             <FormGroup>
@@ -179,7 +201,7 @@ const UserDashboard = () => {
                 id="eventGuests"
                 value={newEventGuests}
                 onChange={(e) => setNewEventGuests(e.target.value)}
-                readOnly={!editMode}
+                required
               />
             </FormGroup>
             <FormGroup>
@@ -190,10 +212,8 @@ const UserDashboard = () => {
                 accept="image/*"
                 onChange={handleImageUpload}
                 readOnly={!imageEditMode || !editMode}
+                required
               />
-              <Button color="secondary" onClick={handleImageEditModeToggle}>
-                {imageEditMode ? "Cancelar Cambio de Imagen" : "Cambiar Imagen"}
-              </Button>
             </FormGroup>
             <Button color="primary" onClick={handleEventRegistration}>
               Registrar Evento
@@ -220,6 +240,7 @@ const UserDashboard = () => {
                     value={selectedEvent.title}
                     onChange={(e) => setNewEventTitle(e.target.value)}
                     readOnly={!editMode}
+                    required
                   />
                 </FormGroup>
                 <FormGroup>
@@ -239,6 +260,7 @@ const UserDashboard = () => {
                     value={selectedEvent.location}
                     onChange={(e) => setNewEventLocation(e.target.value)}
                     readOnly={!editMode}
+                    required
                   />
                 </FormGroup>
                 <FormGroup>
@@ -249,6 +271,7 @@ const UserDashboard = () => {
                     value={selectedEvent.guests}
                     onChange={(e) => setNewEventGuests(e.target.value)}
                     readOnly={!editMode}
+                    required
                   />
                 </FormGroup>
                 <FormGroup>
@@ -263,13 +286,17 @@ const UserDashboard = () => {
                         onChange={handleImageUpload}
                         readOnly={!imageEditMode || !editMode}
                       />
-                      <Button color="secondary" onClick={handleImageEditModeToggle}>
-                        {imageEditMode ? "Cancelar Cambio de Imagen" : "Cambiar Imagen"}
-                      </Button>
                     </>
                   )}
                 </FormGroup>
-                <Button color="primary" onClick={handleEditModeToggle}>
+                {editMode && (
+                  <>
+                    <Button color="primary" onClick={handleSaveChanges}>
+                      Guardar Cambios
+                    </Button>
+                  </>
+                )}
+                <Button color="secondary" onClick={handleEditModeToggle}>
                   {editMode ? "Cancelar Edición" : "Habilitar Edición"}
                 </Button>
               </Form>
