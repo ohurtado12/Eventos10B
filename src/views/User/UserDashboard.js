@@ -105,6 +105,12 @@ const UserDashboard = () => {
       });
   };
 
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <>
       <UserHeader />

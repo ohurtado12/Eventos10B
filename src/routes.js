@@ -29,27 +29,6 @@ var routes = [
     component: <AdminEvents />,
     layout: "/admin",
   },
-  {
-    path: "/admin-user-dashboard",
-    name: "Mis Eventos",
-    icon: "ni ni-tv-2 text-primary",
-    component: <UserDashboard />,
-    layout: "/admin",
-  },
-  // {
-  //   path: "/user-events",
-  //   name: "Explorar Eventos",
-  //   icon: "ni ni-bullet-list-67 text-red",
-  //   component: <UserEvents />,
-  //   layout: "/user",
-  // },
-  // {
-  //   path: "/user-profile",
-  //   name: "Perfil del Usuario",
-  //   icon: "ni ni-single-02 text-yellow",
-  //   component: <UserProfile />,
-  //   layout: "/user",
-  // },
 ];
 
 export default routes;

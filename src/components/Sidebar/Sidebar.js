@@ -31,11 +31,10 @@ import {
   Col,
 } from "reactstrap";
 
-var ps;
-
 const Sidebar = (props) => {
   const urlImg = "https://www2.camara.leg.br/atividade-legislativa/participe/saiba-como-participar/imagens/imagem.2015-10-09.9391415699/image";
   const [collapseOpen, setCollapseOpen] = useState();
+  const userRole = "admin"; // Reemplazar con la lógica para obtener el rol del usuario
 
   const activeRoute = (routeName) => {
     return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -49,19 +48,18 @@ const Sidebar = (props) => {
     setCollapseOpen(false);
   };
 
-  const createLinks = (routes) => {
-    return routes.map((prop, key) => {
-      return (
-        <NavItem key={key}>
-          <NavLink style={{ color: "white" }}
-            to={prop.layout + prop.path}
-            tag={NavLinkRRD}
-            onClick={closeCollapse}>
-            <i className={prop.icon} /><strong>{prop.name}</strong>
-          </NavLink>
-        </NavItem>
-      );
-    });
+  const createLinks = (routes, userRole) => {
+    return routes
+      .filter((route) => !route.roles || route.roles.includes(userRole))
+      .map((prop, key) => {
+        return (
+          <NavItem key={key}>
+            <NavLink style={{ color: "white" }} to={prop.layout + prop.path} tag={NavLinkRRD} onClick={closeCollapse}>
+              <i className={prop.icon} /><strong>{prop.name}</strong>
+            </NavLink>
+          </NavItem>
+        );
+      });
   };
 
   const { bgColor, routes, logo } = props;
@@ -97,6 +95,7 @@ const Sidebar = (props) => {
               width="100px"
               className="navbar-brand-img"
               src={urlImg}
+              alt="Logo"
             />
           </NavbarBrand>
         ) : null}
@@ -123,7 +122,7 @@ const Sidebar = (props) => {
                   <img
                     height="250px"
                     width="100px"
-                    alt={logo.imgAlt}
+                    alt="User Avatar"
                     className="navbar-brand-img"
                     src={urlImg}
                   />
@@ -216,7 +215,7 @@ const Sidebar = (props) => {
               </InputGroupAddon>
             </InputGroup>
           </Form>
-          <Nav navbar>{createLinks(routes)}</Nav>
+          <Nav navbar>{createLinks(routes, userRole)}</Nav>
           <hr className="my-3" />
         </Collapse>
       </Container>
