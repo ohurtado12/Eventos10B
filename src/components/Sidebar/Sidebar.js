@@ -93,8 +93,8 @@ const Sidebar = (props) => {
         {logo ? (
           <NavbarBrand className="pt-0" {...navbarBrandProps}>
             <img
-              height="350px"
-              width="200px"
+              height="150px"
+              width="100px"
               className="navbar-brand-img"
               src={urlImg}
             />
