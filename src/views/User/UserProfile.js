@@ -1,3 +1,4 @@
+// UserProfile.js
 import React, { useState } from "react";
 import {
   Container,
@@ -15,21 +16,29 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import UserHeader from "components/Headers/UserHeader";
+import UserHeader2 from "components/Headers/UserHeader2";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
+import AdminFooter from "../../components/Footers/AdminFooter"
 
 const UserProfile = () => {
   const [userInfo, setUserInfo] = useState({
-    username: "JohnDoe",
-    email: "john.doe@example.com",
-    password: "********",
+    nombre: "John",
+    apellidoPaterno: "Doe",
+    apellidoMaterno: "Doe",
+    edad: 30,
+    rol: "Usuario",
+    direccion: "123 Calle Principal",
+    telefono: "555-1234",
+    email: "obedhurtado@utez.edu.mx",
+    password: "Utez2021."
   });
 
   const [changeInfoModal, setChangeInfoModal] = useState(false);
   const [changePasswordModal, setChangePasswordModal] = useState(false);
-  const [newUsername, setNewUsername] = useState("");
+  const [newUsername, setNewUsername] = useState("obedhurtado@utez.edu.mx");
   const [newEmail, setNewEmail] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("Utez2021.");
   const [newPassword, setNewPassword] = useState("");
 
   const toggleChangeInfoModal = () => {
@@ -45,39 +54,78 @@ const UserProfile = () => {
   };
 
   const handleChangeInfo = () => {
-    // Perform validation and update user information
     setUserInfo({
       ...userInfo,
-      username: newUsername || userInfo.username,
+      nombre: newUsername || userInfo.nombre,
       email: newEmail || userInfo.email,
     });
 
     Swal.fire({
-      title: "User information updated successfully!",
+      title: "¡Información de usuario actualizada con éxito!",
       icon: "success",
     }).then(() => {
       toggleChangeInfoModal();
     });
   };
 
+  const changePersonalInfo = () => {
+    Swal.fire({
+      title: "¡Información de usuario actualizada con éxito!",
+      icon: "success",
+    }).then(() => {
+      toggleChangeInfoModal();
+    });
+  }
+
   const handleChangePassword = () => {
-    // Perform validation and update password
     setUserInfo({
       ...userInfo,
       password: newPassword,
     });
 
     Swal.fire({
-      title: "Password changed successfully!",
+      title: "¡Contraseña cambiada con éxito!",
       icon: "success",
     }).then(() => {
       toggleChangePasswordModal();
     });
   };
 
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
+
   return (
     <>
-      <UserHeader />
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+        <Container>
+          <button
+            className="navbar-toggler"
+            type="button"
+            onClick={toggleMenu}
+          >
+            ☰
+          </button>
+          <div
+            className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}
+          >
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/user">
+                  Mis Eventos
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/user-profile" className="nav-link">
+                  Mi Perfil
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </Container>
+      </nav>
+      <UserHeader2 />
       <Container className="mt--7" fluid>
         <Row>
           <Col className="order-xl-1" xl="8">
@@ -85,7 +133,7 @@ const UserProfile = () => {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">My Account</h3>
+                    <h3 className="mb-0">Mi Cuenta</h3>
                   </Col>
                   <Col className="text-right" xs="4">
                     <Button
@@ -93,14 +141,140 @@ const UserProfile = () => {
                       onClick={toggleChangeInfoModal}
                       size="sm"
                     >
-                      Change Info
+                      Cambiar Información
                     </Button>
+                  </Col>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <div className="pl-lg-4">
+
+                  <Row>
+                    <Col md="6">
+                      <FormGroup>
+                        <label className="form-control-label" htmlFor="input-nombre">
+                          Nombre
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          defaultValue={userInfo.nombre}
+                          id="input-nombre"
+                          placeholder="Nombre"
+                          type="text"
+                          disabled
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <label className="form-control-label" htmlFor="input-apellido-paterno">
+                          Apellido Paterno
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          defaultValue={userInfo.apellidoPaterno}
+                          id="input-apellido-paterno"
+                          placeholder="Apellido Paterno"
+                          type="text"
+                          disabled
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <label className="form-control-label" htmlFor="input-apellido-materno">
+                          Apellido Materno
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          defaultValue={userInfo.apellidoMaterno}
+                          id="input-apellido-materno"
+                          placeholder="Apellido Materno"
+                          type="text"
+                          disabled
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <label className="form-control-label" htmlFor="input-edad">
+                          Edad
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          defaultValue={userInfo.edad}
+                          id="input-edad"
+                          placeholder="Edad"
+                          type="text"
+                          disabled
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <label className="form-control-label" htmlFor="input-rol">
+                          Rol
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          defaultValue={userInfo.rol}
+                          id="input-rol"
+                          placeholder="Rol"
+                          type="text"
+                          disabled
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <label className="form-control-label" htmlFor="input-direccion">
+                          Dirección
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          defaultValue={userInfo.direccion}
+                          id="input-direccion"
+                          placeholder="Dirección"
+                          type="text"
+                          disabled
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <label className="form-control-label" htmlFor="input-telefono">
+                          Teléfono
+                        </label>
+                        <Input
+                          className="form-control-alternative"
+                          defaultValue={userInfo.telefono}
+                          id="input-telefono"
+                          placeholder="Teléfono"
+                          type="text"
+                          disabled
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+
+          <Col className="order-xl-1" xl="4">
+            <Card className="bg-secondary shadow">
+              <CardHeader className="bg-white border-0">
+                <Row className="align-items-center">
+                  <Col xs="8">
+                    <h3 className="mb-0">Mi Cuenta</h3>
+                  </Col>
+                  <Col className="text-right" xs="4">
                     <Button
                       color="primary"
                       onClick={toggleChangePasswordModal}
                       size="sm"
                     >
-                      Change Password
+                      Editar
                     </Button>
                   </Col>
                 </Row>
@@ -108,28 +282,28 @@ const UserProfile = () => {
               <CardBody>
                 <div className="pl-lg-4">
                   <FormGroup>
-                    <label className="form-control-label" htmlFor="input-username">
-                      Username
+                    <label className="form-control-label" htmlFor="input-nombre">
+                      Correo
                     </label>
                     <Input
                       className="form-control-alternative"
-                      defaultValue={userInfo.username}
-                      id="input-username"
-                      placeholder="Username"
+                      defaultValue={userInfo.email}
+                      id="input-nombre"
+                      placeholder="Nombre"
                       type="text"
                       disabled
                     />
                   </FormGroup>
                   <FormGroup>
-                    <label className="form-control-label" htmlFor="input-email">
-                      Email address
+                    <label className="form-control-label" htmlFor="input-apellido-paterno">
+                      Contraseña
                     </label>
                     <Input
                       className="form-control-alternative"
-                      defaultValue={userInfo.email}
-                      id="input-email"
-                      placeholder="jesse@example.com"
-                      type="email"
+                      defaultValue={userInfo.password}
+                      id="input-apellido-paterno"
+                      placeholder="Apellido Paterno"
+                      type="text"
                       disabled
                     />
                   </FormGroup>
@@ -140,79 +314,146 @@ const UserProfile = () => {
         </Row>
       </Container>
 
-      {/* Change Info Modal */}
+      {/* Cambiar Info Modal */}
       <Modal isOpen={changeInfoModal} toggle={toggleChangeInfoModal}>
-        <ModalHeader toggle={toggleChangeInfoModal}>Change User Info</ModalHeader>
+        <ModalHeader toggle={toggleChangeInfoModal}>Cambiar Información de Usuario</ModalHeader>
+        <ModalBody>
+          <div className="pl-lg-12">
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-nombre">
+                Nombre
+              </label>
+              <Input
+                className="form-control-alternative"
+                defaultValue={userInfo.nombre}
+                id="input-nombre"
+                placeholder="Nombre"
+                type="text"
+                disabled
+              />
+            </FormGroup>
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-apellido-paterno">
+                Apellido Paterno
+              </label>
+              <Input
+                className="form-control-alternative"
+                defaultValue={userInfo.apellidoPaterno}
+                id="input-apellido-paterno"
+                placeholder="Apellido Paterno"
+                type="text"
+                disabled
+              />
+            </FormGroup>
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-apellido-materno">
+                Apellido Materno
+              </label>
+              <Input
+                className="form-control-alternative"
+                defaultValue={userInfo.apellidoMaterno}
+                id="input-apellido-materno"
+                placeholder="Apellido Materno"
+                type="text"
+                disabled
+              />
+            </FormGroup>
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-edad">
+                Edad
+              </label>
+              <Input
+                className="form-control-alternative"
+                defaultValue={userInfo.edad}
+                id="input-edad"
+                placeholder="Edad"
+                type="text"
+                disabled
+              />
+            </FormGroup>
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-rol">
+                Rol
+              </label>
+              <Input
+                className="form-control-alternative"
+                defaultValue={userInfo.rol}
+                id="input-rol"
+                placeholder="Rol"
+                type="text"
+                disabled
+              />
+            </FormGroup>
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-direccion">
+                Dirección
+              </label>
+              <Input
+                className="form-control-alternative"
+                defaultValue={userInfo.direccion}
+                id="input-direccion"
+                placeholder="Dirección"
+                type="text"
+                disabled
+              />
+            </FormGroup>
+            <FormGroup>
+              <label className="form-control-label" htmlFor="input-telefono">
+                Teléfono
+              </label>
+              <Input
+                className="form-control-alternative"
+                defaultValue={userInfo.telefono}
+                id="input-telefono"
+                placeholder="Teléfono"
+                type="text"
+                disabled
+              />
+            </FormGroup>
+            <Button color="primary" onClick={changePersonalInfo}>
+              Guardar Cambios
+            </Button>
+          </div>
+        </ModalBody>
+      </Modal>
+
+      {/* Cambiar Contraseña Modal */}
+      <Modal isOpen={changePasswordModal} toggle={toggleChangePasswordModal}>
+        <ModalHeader toggle={toggleChangePasswordModal}>Cambiar Contraseña</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
-              <Label for="newUsername">New Username</Label>
+              <Label for="currentPassword">Contraseña Actual</Label>
               <Input
-                type="text"
-                name="newUsername"
-                id="newUsername"
-                placeholder="Enter new username"
-                value={newUsername}
-                onChange={(e) => setNewUsername(e.target.value)}
+                type="password"
+                name="currentPassword"
+                id="currentPassword"
+                placeholder="Ingrese contraseña actual"
+                value={"@Utez2021."}
+                onChange={(e) => setCurrentPassword(e.target.value)}
               />
             </FormGroup>
             <FormGroup>
-              <Label for="newEmail">New Email</Label>
+              <Label for="newPassword">Nueva Contraseña</Label>
               <Input
-                type="email"
-                name="newEmail"
-                id="newEmail"
-                placeholder="Enter new email"
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
+                type="password"
+                name="newPassword"
+                id="newPassword"
+                placeholder="Ingrese nueva contraseña"
+                onChange={(e) => setNewPassword(e.target.value)}
               />
             </FormGroup>
-            <Button color="primary" onClick={handleChangeInfo}>
-              Save Changes
+            <Button color="primary" onClick={handleChangePassword}>
+              Guardar Cambios
             </Button>{" "}
-            <Button color="secondary" onClick={toggleChangeInfoModal}>
-              Cancel
+            <Button color="secondary" onClick={toggleChangePasswordModal}>
+              Cancelar
             </Button>
           </Form>
         </ModalBody>
       </Modal>
 
-      {/* Change Password Modal */}
-      <Modal isOpen={changePasswordModal} toggle={toggleChangePasswordModal}>
-        <ModalHeader toggle={toggleChangePasswordModal}>Change Password</ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="currentPassword">Current Password</Label>
-              <Input
-                type="password"
-                name="currentPassword"
-                id="currentPassword"
-                placeholder="Enter current password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="newPassword">New Password</Label>
-              <Input
-                type="password"
-                name="newPassword"
-                id="newPassword"
-                placeholder="Enter new password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-            </FormGroup>
-            <Button color="primary" onClick={handleChangePassword}>
-              Save Changes
-            </Button>{" "}
-            <Button color="secondary" onClick={toggleChangePasswordModal}>
-              Cancel
-            </Button>
-          </Form>
-        </ModalBody>
-      </Modal>
+      <AdminFooter/>
     </>
   );
 };

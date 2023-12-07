@@ -21,14 +21,15 @@ const UserHeader = () => {
           
           <Row>
             <Col lg="12" md="12">
-              <h1 className="display-2 text-white">Mis Eventos</h1>
+              <h1 className="display-2 text-white">Mi Perfil</h1>
               <p className="text-white mt-0 mb-5">
-                Se muestra un listado con tus eventos registrados
+                Se muestra su información personal
               </p>
             </Col>
           </Row>
         </Container>
       </div>
+      <br/><br/><br/>
     </>
   );
 };

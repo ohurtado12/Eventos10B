@@ -5,6 +5,9 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import UserHeader from "components/Headers/UserHeader";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
+import AdminFooter from "../../components/Footers/AdminFooter"
+
 
 const UserDashboard = () => {
   const [events, setEvents] = useState([
@@ -111,8 +114,43 @@ const UserDashboard = () => {
     setSidebarOpen(!isSidebarOpen);
   };
 
+  const [isMenuOpen, setMenuOpen] = useState(false);
+
+
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
+
   return (
     <>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+        <Container>
+          <button
+            className="navbar-toggler"
+            type="button"
+            onClick={toggleMenu}
+          >
+            ☰
+          </button>
+          <div
+            className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}
+          >
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/user">
+                  Mis Eventos
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/user-profile">
+                  Mi Perfil
+                </Link>
+              </li>
+
+            </ul>
+          </div>
+        </Container>
+      </nav>
       <UserHeader />
       <br /><br /><br />
       <Container className="mt--7" fluid>
@@ -310,6 +348,7 @@ const UserDashboard = () => {
           )}
         </ModalBody>
       </Modal>
+      <AdminFooter/>
     </>
   );
 };
